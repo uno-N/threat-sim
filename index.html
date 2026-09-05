@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>あなたの事業所は守れるか？</title>
+<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style>
+<style>
+  @font-face {
+    font-family: 'system-fallback';
+    src: local('Hiragino Sans');
+  }
+
+  :root {
+    --ink: #16232b;
+    --ink-soft: #3c4d55;
+    --paper: #eef2f1;
+    --paper-raised: #ffffff;
+    --line: #c7d2ce;
+    --accent: #2f8a82;
+    --accent-ink: #ffffff;
+    --safe: #4f8f5c;
+    --safe-bg: #e3efe2;
+    --caution: #b5792a;
+    --caution-bg: #f4e6cf;
+    --critical: #b7402f;
+    --critical-bg: #f4ded9;
+    --shadow: 0 1px 0 rgba(22,35,43,0.05), 0 8px 24px -12px rgba(22,35,43,0.25);
+
+    --font-display: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
+    --font-body: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7edec;
+      --ink-soft: #a9b8b5;
+      --paper: #0f1719;
+      --paper-raised: #16211f;
+      --line: #2a3a37;
+      --accent: #5bb6ac;
+      --accent-ink: #06201d;
+      --safe: #7ec98c;
+      --safe-bg: #17281c;
+      --caution: #e0a852;
+      --caution-bg: #2c2115;
+      --critical: #e28273;
+      --critical-bg: #2c1714;
+      --shadow: 0 1px 0 rgba(0,0,0,0.4), 0 8px 28px -12px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7edec; --ink-soft: #a9b8b5; --paper: #0f1719; --paper-raised: #16211f;
+    --line: #2a3a37; --accent: #5bb6ac; --accent-ink: #06201d; --safe: #7ec98c;
+    --safe-bg: #17281c; --caution: #e0a852; --caution-bg: #2c2115; --critical: #e28273;
+    --critical-bg: #2c1714; --shadow: 0 1px 0 rgba(0,0,0,0.4), 0 8px 28px -12px rgba(0,0,0,0.6);
+  }
+  :root[data-theme="light"] {
+    --ink: #16232b; --ink-soft: #3c4d55; --paper: #eef2f1; --paper-raised: #ffffff;
+    --line: #c7d2ce; --accent: #2f8a82; --accent-ink: #ffffff; --safe: #4f8f5c;
+    --safe-bg: #e3efe2; --caution: #b5792a; --caution-bg: #f4e6cf; --critical: #b7402f;
+    --critical-bg: #f4ded9; --shadow: 0 1px 0 rgba(22,35,43,0.05), 0 8px 24px -12px rgba(22,35,43,0.25);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-display);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .masthead {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .masthead .kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+  .masthead .code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 2px 6px;
+  }
+
+  .screen { display: none; flex: 1; flex-direction: column; padding: 28px 20px 40px; animation: rise 0.35s ease both; }
+  .screen.active { display: flex; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { .screen { animation: none; } }
+
+  h1.title {
+    font-size: 26px;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  p.lede {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    margin: 0 0 28px;
+    max-width: 34em;
+  }
+
+  .menu-list { display: flex; flex-direction: column; gap: 12px; }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 16px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .menu-item:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .menu-item:active { transform: translateY(0); }
+  .menu-item .num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .menu-item .label { font-size: 16px; font-weight: 600; }
+  .menu-item .sub { font-size: 12px; color: var(--ink-soft); margin-top: 2px; font-family: var(--font-body); }
+  .menu-item .arrow { margin-left: auto; color: var(--ink-soft); font-family: var(--font-mono); }
+
+  .menu-note {
+    margin-top: 26px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    border-top: 1px dashed var(--line);
+    padding-top: 16px;
+    line-height: 1.8;
+  }
+
+  /* quiz */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .progress-row .back {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+  .progress-row .step {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  .progress-track { height: 3px; background: var(--line); border-radius: 2px; margin-bottom: 26px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
+
+  .scenario-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 20px 22px;
+    box-shadow: var(--shadow);
+    margin-bottom: 22px;
+  }
+  .scenario-card .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .scenario-text {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 2;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .choice-list { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn {
+    text-align: left;
+    background: var(--paper-raised);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 15px 16px;
+    font-family: var(--font-display);
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+  }
+  .choice-btn:hover { border-color: var(--accent); }
+  .choice-btn:active { background: var(--safe-bg); }
+  .choice-btn .letter {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* outcome */
+  .stamp-wrap { display: flex; justify-content: center; margin: 12px 0 26px; }
+  .stamp {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    border: 4px solid currentColor;
+    border-radius: 8px;
+    padding: 10px 22px;
+    transform: rotate(-4deg);
+    display: inline-block;
+  }
+  .stamp.safe { color: var(--safe); }
+  .stamp.critical { color: var(--critical); }
+
+  .outcome-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+  .outcome-card.safe { border-color: var(--safe); background: var(--safe-bg); }
+  .outcome-card.critical { border-color: var(--critical); background: var(--critical-bg); }
+  .outcome-card .headline { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
+  .outcome-card .body-text {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.95;
+    color: var(--ink);
+  }
+
+  .primary-btn {
+    margin-top: auto;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+  .ghost-btn {
+    margin-top: 12px;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    border-radius: 10px;
+    padding: 13px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+
+  /* ===== omen (scareware) screen ===== */
+  #screen-omen { padding: 0; position: relative; background: #05070a; overflow: hidden; }
+  .omen-stage { position: relative; flex: 1; min-height: 100vh; display: flex; align-items: flex-end; }
+  .omen-popup {
+    position: absolute;
+    width: 86%;
+    max-width: 340px;
+    background: #fff;
+    color: #111;
+    border-radius: 6px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.9);
+    animation: pop-in 0.4s cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .omen-popup { animation: none; opacity: 1; transform: scale(1); }
+  }
+  @keyframes pop-in { to { opacity: 1; transform: scale(1); } }
+  .omen-popup .bar { background: #b7402f; color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 12px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .omen-popup .omen-x {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    width: 22px;
+    height: 22px;
+    line-height: 1;
+    font-size: 13px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(3px); }
+  }
+  .omen-popup .content { padding: 16px 14px 18px; }
+  .omen-popup .warn-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+  .omen-popup .msg { font-family: var(--font-display); font-weight: 700; font-size: 14.5px; line-height: 1.6; margin-bottom: 14px; }
+  .omen-popup .call-btn {
+    width: 100%;
+    background: #b7402f;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 13px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    animation: shake 1.4s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) { .omen-popup .call-btn { animation: none; } }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-2px); } 75% { transform: translateX(2px); } }
+  .omen-popup .timer { font-family: var(--font-mono); font-size: 11px; color: #8a1f12; margin-top: 8px; text-align: center; font-variant-numeric: tabular-nums; }
+
+  .omen-title-flash {
+    position: absolute;
+    top: 40px;
+    left: 0; right: 0;
+    text-align: center;
+    color: #ff6b57;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    animation: flash 1s steps(2) infinite;
+    padding: 0 20px;
+    text-wrap: balance;
+  }
+  @media (prefers-reduced-motion: reduce) { .omen-title-flash { animation: none; } }
+  @keyframes flash { 50% { opacity: 0.35; } }
+
+  .omen-intro {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 24px;
+    color: #dfe7e5;
+  }
+  .omen-intro .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: #6f8a85; text-transform: uppercase; margin-bottom: 10px; }
+  .omen-intro h2 { font-size: 22px; line-height: 1.5; margin: 0 0 14px; text-wrap: balance; }
+  .omen-intro p { font-family: var(--font-body); font-size: 15px; line-height: 2; color: #aebab7; margin: 0 0 26px; }
+  .omen-start-btn {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: none;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  /* ===== mail (phishing) screens ===== */
+  .mail-list { display: flex; flex-direction: column; gap: 8px; }
+  .mail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 14px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .mail-item.filler { opacity: 0.55; cursor: default; }
+  .mail-item .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .mail-item .body { flex: 1; min-width: 0; }
+  .mail-item .row1 { display: flex; justify-content: space-between; gap: 8px; }
+  .mail-item .sender { font-weight: 700; font-size: 14px; }
+  .mail-item .time { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); flex-shrink: 0; }
+  .mail-item .subject { font-size: 13.5px; font-weight: 600; margin-top: 2px; }
+  .mail-item .preview {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mail-detail {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 18px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+  }
+  .mail-field { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .mail-field:last-of-type { border-bottom: none; }
+  .mail-field-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .mail-field-value { font-size: 15px; font-weight: 600; }
+  .mail-reveal-btn {
+    display: block;
+    margin-top: 8px;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--accent);
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    cursor: pointer;
+  }
+  .mail-from-raw {
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--paper);
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 8px 10px;
+    word-break: break-all;
+  }
+  .mail-body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 2;
+    padding-top: 12px;
+  }
+  #mail-normal-body { white-space: pre-line; }
+  .mail-link-btn {
+    background: var(--caution-bg);
+    color: var(--caution);
+    border: 1px solid var(--caution);
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .fake-login-card {
+    background: #fff;
+    color: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 12px 34px -10px rgba(0,0,0,0.4);
+    margin-top: 40px;
+  }
+  .fake-login-bar {
+    background: #2f6fa8;
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 14px 16px;
+  }
+  .fake-login-body { padding: 20px 18px 22px; }
+  .fake-login-body p { font-family: var(--font-body); font-size: 14.5px; line-height: 1.8; margin: 0 0 18px; }
+  .fake-login-body label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 14px;
+  }
+  .fake-login-body input {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .fake-login-body .primary-btn { margin-top: 6px; width: 100%; display: block; }
+  .fake-login-body .ghost-btn { width: 100%; display: block; }
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <div class="masthead">
+    <span class="kicker">Threat Simulation</span>
+    <span class="code">CASE-FILE</span>
+  </div>
+
+  <!-- MENU -->
+  <div class="screen active" id="screen-menu">
+    <h1 class="title">あなたの事業所は<br>守れるか？</h1>
+    <p class="lede">今から話す脅威を選んで、自分ならどうするか体験してみてください。すべての場面は、実際に起きた事件がもとになっています。</p>
+    <div class="menu-list" id="menu-list"></div>
+    <p class="menu-note">選んだ内容が採点されて送信されることはありません。すべてこの画面の中だけで完結します。</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screen-quiz">
+    <div class="progress-row">
+      <button class="back" id="quiz-back">← 選び直す</button>
+      <span class="step" id="quiz-step">Q1 / 3</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="quiz-progress"></div></div>
+    <div class="scenario-card">
+      <span class="eyebrow" id="quiz-eyebrow">SCENARIO</span>
+      <div class="scenario-text" id="quiz-text"></div>
+    </div>
+    <div class="choice-list" id="quiz-choices"></div>
+  </div>
+
+  <!-- OUTCOME -->
+  <div class="screen" id="screen-outcome">
+    <div class="stamp-wrap"><div class="stamp" id="outcome-stamp"></div></div>
+    <div class="outcome-card" id="outcome-card">
+      <p class="headline" id="outcome-headline"></p>
+      <p class="body-text" id="outcome-body"></p>
+    </div>
+    <button class="primary-btn" id="outcome-menu-btn">画面に戻って発表を聞く</button>
+    <button class="ghost-btn" id="outcome-retry-btn">もう一度、この脅威を選び直す</button>
+  </div>
+
+  <!-- OMEN (scareware) -->
+  <div class="screen" id="screen-omen">
+    <div class="omen-stage" id="omen-stage">
+      <div class="omen-intro" id="omen-intro">
+        <span class="k">Case 05 — 予兆</span>
+        <h2>自宅で、私物のパソコンを開いています。</h2>
+        <p>訪問の記録を整理しようとした、そのときです。画面に見覚えのない表示が出てきます。何が起きるか、実際に体験してみてください。</p>
+        <button class="omen-start-btn" id="omen-start-btn">パソコンの画面を見る →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIL INBOX -->
+  <div class="screen" id="screen-mail-inbox">
+    <div class="progress-row">
+      <button class="back" id="mail-inbox-back">← 選び直す</button>
+      <span class="step">受信トレイ</span>
+    </div>
+    <p class="lede" style="margin-bottom:18px;">今朝、スマホにこのメールが届いています。気になるものがあれば開いてみてください。</p>
+    <div class="mail-list" id="mail-list"></div>
+  </div>
+
+  <!-- MAIL VIEW -->
+  <div class="screen" id="screen-mail-view">
+    <div class="progress-row">
+      <button class="back" id="mail-view-back">← 受信トレイ</button>
+      <span class="step">CASE 02 — フィッシング</span>
+    </div>
+    <div class="mail-detail">
+      <div class="mail-field">
+        <span class="mail-field-label">差出人</span>
+        <span class="mail-field-value">厚生労働省</span>
+        <button class="mail-reveal-btn" id="mail-reveal-btn">差出人のアドレスを確認する</button>
+        <div class="mail-from-raw" id="mail-from-raw" hidden>info@mhlw-johokanri.jp</div>
+      </div>
+      <div class="mail-field">
+        <span class="mail-field-label">件名</span>
+        <span class="mail-field-value">【至急】医療情報システムのご確認</span>
+      </div>
+      <div class="mail-body">
+        平素より医療情報システムをご利用いただき、誠にありがとうございます。<br><br>
+        このたび、医療情報システムの改修に伴い、ログイン情報の再確認をお願いしております。<br><br>
+        下記より、お手続きをお願いいたします。<br><br>
+        <button class="mail-link-btn" id="mail-link-btn">🔗 ログイン情報を確認する</button>
+        <br><br>
+        ※本手続きが完了しない場合、システムがご利用いただけなくなる可能性がございます。<br><br>
+        厚生労働省 医療情報システム推進室
+      </div>
+    </div>
+    <button class="primary-btn" id="mail-official-btn">リンクは押さず、公式サイトで確認する</button>
+  </div>
+
+  <!-- MAIL FAKE LOGIN -->
+  <div class="screen" id="screen-mail-login">
+    <div class="fake-login-card">
+      <div class="fake-login-bar">医療情報システム ログイン確認</div>
+      <div class="fake-login-body">
+        <p>システム改修のため、お手数ですが再度ログイン情報をご入力ください。</p>
+        <label>カルテID
+          <input type="text" id="fake-id" autocomplete="off">
+        </label>
+        <label>パスワード
+          <input type="password" id="fake-pw" autocomplete="off">
+        </label>
+        <button class="primary-btn" id="fake-submit-btn">送信する</button>
+        <button class="ghost-btn" id="fake-back-btn">なんだか怪しいので、閉じて戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIL NORMAL (filler emails) -->
+  <div class="screen" id="screen-mail-normal">
+    <div class="progress-row">
+      <button class="back" id="mail-normal-back">← 受信トレイ</button>
+      <span class="step">通常のメール</span>
+    </div>
+    <div class="mail-detail">
+      <div class="mail-field">
+        <span class="mail-field-label">差出人</span>
+        <span class="mail-field-value" id="mail-normal-sender"></span>
+      </div>
+      <div class="mail-field">
+        <span class="mail-field-label">件名</span>
+        <span class="mail-field-value" id="mail-normal-subject"></span>
+      </div>
+      <div class="mail-body" id="mail-normal-body"></div>
+    </div>
+    <p class="lede" style="margin-bottom:0;">これは特に怪しい点のない、普段どおりのメールです。受信トレイに戻って、他のメールも確認してみてください。</p>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var GAMES = {
+    access: {
+      title: "不正アクセス編",
+      sub: "保守用の接続、共有アカウント、退職者のID",
+      questions: [
+        {
+          text: "システムの保守をお願いしている業者さんから連絡がありました。「遠隔でメンテナンスするための機械が古くなっているので、安全のために新しくしたいのですが、少しお時間をいただけますか」とのこと。ちょうど今月は人手が足りず、現場はバタバタしている。",
+          choices: [
+            { label: "多少バタバタしていても、日程を調整してすぐにお願いする", safe: true },
+            { label: "今は緊急のトラブルが起きているわけでもないし、落ち着いた時期にまとめてお願いすることにする", safe: false }
+          ]
+        },
+        {
+          text: "新しく入ったスタッフに、電子カルテの使い方を教えることになった。今日から使ってもらいたいが、新しいIDを発行するにはベンダーに連絡してから3日ほどかかるらしい。",
+          choices: [
+            { label: "3日待って、新しいIDを発行してもらってから使い始めてもらう", safe: true },
+            { label: "今日からすぐ動いてもらいたいので、とりあえず先輩スタッフのIDとパスワードを教えて使ってもらう", safe: false }
+          ]
+        },
+        {
+          text: "3ヶ月前に退職したスタッフがいる。システムの利用者一覧を見返していたら、そのスタッフのIDがまだ残っていることに気づいた。",
+          choices: [
+            { label: "気づいたその日のうちに、システム担当者に連絡して削除・使えない状態にしてもらう", safe: true },
+            { label: "もう辞めた人だし、今さらログインもしないだろうから、次に整理するときでいいかと後回しにする", safe: false }
+          ]
+        }
+      ],
+      success: "よくできました。実はこの3つの場面、すべて実際に起きた事件のきっかけがモデルになっています。次のスライドで、同じ状況で実際に何が起きた医療機関があるか見てみましょう。",
+      fail: "不正アクセスを許してしまいました。実際にこれと同じことが起きた医療機関では、サーバー約30台・端末244台が暗号化され、最大4万人分の情報が漏えいした可能性があり、復旧に3か月かかりました。次のスライドで、実際に何が起きたか見てみましょう。"
+    },
+
+    phishing: {
+      title: "フィッシング編",
+      sub: "受信トレイから、怪しいメールを開いてみる"
+    },
+
+    malware: {
+      title: "マルウェア編",
+      sub: "重いパソコン、更新の通知、私物のUSB",
+      questions: [
+        {
+          text: "パソコンの動きが最近重い。いつも画面の隅にあるはずのウイルス対策ソフトのアイコンが消えている気がする。でも急ぎの仕事があって、今は手が離せない。",
+          choices: [
+            { label: "気になったので、システム担当者かベンダーにすぐ連絡して確認してもらう", safe: true },
+            { label: "仕事が終わってから確認しようと、そのまま作業を続ける", safe: false }
+          ]
+        },
+        {
+          text: "電子カルテのシステムから「更新プログラムがあります。再起動が必要です」という通知が出た。ちょうど訪問記録をたくさん入力している最中で、再起動すると今の入力作業が中断してしまう。",
+          choices: [
+            { label: "今の作業を安全に保存してから、更新・再起動を行う", safe: true },
+            { label: "今は忙しいので通知を閉じて、更新は後回しにする", safe: false }
+          ]
+        },
+        {
+          text: "自宅のパソコンにデータをコピーして作業したいとき、私物のUSBメモリを使いたい。",
+          choices: [
+            { label: "職場のルールを確認し、私物USBの使用が制限されていないか確認してから使う", safe: true },
+            { label: "いつも使っているUSBだし、特に確認せずそのまま使う", safe: false }
+          ]
+        }
+      ],
+      success: "よくできました。実はこの3つの場面、すべて実際に起きた事件のきっかけがモデルになっています。次のスライドで、同じような状況で実際に何が起きたか見てみましょう。",
+      fail: "マルウェアに感染してしまいました。実際にこれと同じことが起きた医療機関では、システムが暗号化された上に情報を盗まれ、「払わなければ公開する」と脅されました。警察庁のデータでは、復旧費用が1000万円を超えたケースが約半数。実際に身代金150億円を要求された医療機関もあります。次のスライドで、実際に何が起きたか見てみましょう。"
+    }
+  };
+
+  var MENU_ORDER = [
+    { key: "access", num: "I" },
+    { key: "phishing", num: "II" },
+    { key: "malware", num: "III" },
+    { key: "omen", num: "V" }
+  ];
+
+  var els = {
+    menuList: document.getElementById("menu-list"),
+    screens: {
+      menu: document.getElementById("screen-menu"),
+      quiz: document.getElementById("screen-quiz"),
+      outcome: document.getElementById("screen-outcome"),
+      omen: document.getElementById("screen-omen"),
+      mailInbox: document.getElementById("screen-mail-inbox"),
+      mailView: document.getElementById("screen-mail-view"),
+      mailLogin: document.getElementById("screen-mail-login"),
+      mailNormal: document.getElementById("screen-mail-normal")
+    },
+    quizStep: document.getElementById("quiz-step"),
+    quizProgress: document.getElementById("quiz-progress"),
+    quizEyebrow: document.getElementById("quiz-eyebrow"),
+    quizText: document.getElementById("quiz-text"),
+    quizChoices: document.getElementById("quiz-choices"),
+    quizBack: document.getElementById("quiz-back"),
+    outcomeStamp: document.getElementById("outcome-stamp"),
+    outcomeCard: document.getElementById("outcome-card"),
+    outcomeHeadline: document.getElementById("outcome-headline"),
+    outcomeBody: document.getElementById("outcome-body"),
+    outcomeMenuBtn: document.getElementById("outcome-menu-btn"),
+    outcomeRetryBtn: document.getElementById("outcome-retry-btn"),
+    omenStage: document.getElementById("omen-stage"),
+    omenIntro: document.getElementById("omen-intro"),
+    omenStartBtn: document.getElementById("omen-start-btn"),
+    mailList: document.getElementById("mail-list"),
+    mailInboxBack: document.getElementById("mail-inbox-back"),
+    mailViewBack: document.getElementById("mail-view-back"),
+    mailRevealBtn: document.getElementById("mail-reveal-btn"),
+    mailFromRaw: document.getElementById("mail-from-raw"),
+    mailLinkBtn: document.getElementById("mail-link-btn"),
+    mailOfficialBtn: document.getElementById("mail-official-btn"),
+    fakeId: document.getElementById("fake-id"),
+    fakePw: document.getElementById("fake-pw"),
+    fakeSubmitBtn: document.getElementById("fake-submit-btn"),
+    fakeBackBtn: document.getElementById("fake-back-btn"),
+    mailNormalBack: document.getElementById("mail-normal-back"),
+    mailNormalSender: document.getElementById("mail-normal-sender"),
+    mailNormalSubject: document.getElementById("mail-normal-subject"),
+    mailNormalBody: document.getElementById("mail-normal-body")
+  };
+
+  var currentReplay = null;
+
+  function showScreen(name) {
+    Object.keys(els.screens).forEach(function (k) {
+      els.screens[k].classList.toggle("active", k === name);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function renderMenu() {
+    els.menuList.innerHTML = "";
+    MENU_ORDER.forEach(function (item) {
+      var btn = document.createElement("button");
+      btn.className = "menu-item";
+      var title, sub;
+      if (item.key === "omen") {
+        title = "予兆編";
+        sub = "自宅のパソコンに、突然の警告が出たら";
+      } else {
+        title = GAMES[item.key].title;
+        sub = GAMES[item.key].sub;
+      }
+      btn.innerHTML =
+        '<span class="num">' + item.num + '</span>' +
+        '<span>' +
+          '<span class="label">' + title + '</span>' +
+          '<div class="sub">' + sub + '</div>' +
+        '</span>' +
+        '<span class="arrow">→</span>';
+      btn.addEventListener("click", function () {
+        if (item.key === "omen") { startOmen(); }
+        else if (item.key === "phishing") { startPhishing(); }
+        else { startQuiz(item.key); }
+      });
+      els.menuList.appendChild(btn);
+    });
+  }
+
+  // ---- quiz engine ----
+  var quizState = { key: null, index: 0, failed: false };
+
+  function startQuiz(key) {
+    quizState = { key: key, index: 0, failed: false };
+    currentReplay = function () { startQuiz(key); };
+    renderQuizQuestion();
+    showScreen("quiz");
+  }
+
+  function renderQuizQuestion() {
+    var game = GAMES[quizState.key];
+    var q = game.questions[quizState.index];
+    els.quizEyebrow.textContent = game.title.toUpperCase();
+    els.quizStep.textContent = "Q" + (quizState.index + 1) + " / " + game.questions.length;
+    els.quizProgress.style.width = (((quizState.index) / game.questions.length) * 100) + "%";
+    els.quizText.textContent = q.text;
+    els.quizChoices.innerHTML = "";
+    var letters = ["A", "B"];
+    q.choices.forEach(function (choice, i) {
+      var btn = document.createElement("button");
+      btn.className = "choice-btn";
+      btn.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + choice.label + '</span>';
+      btn.addEventListener("click", function () { answerQuiz(choice.safe); });
+      els.quizChoices.appendChild(btn);
+    });
+  }
+
+  function answerQuiz(safe) {
+    if (!safe) { quizState.failed = true; }
+    quizState.index++;
+    var game = GAMES[quizState.key];
+    if (quizState.index >= game.questions.length) {
+      els.quizProgress.style.width = "100%";
+      showOutcome(quizState.failed, game.success, game.fail);
+    } else {
+      renderQuizQuestion();
+    }
+  }
+
+  els.quizBack.addEventListener("click", function () { showScreen("menu"); });
+
+  function showOutcome(failed, successText, failText) {
+    if (failed) {
+      els.outcomeStamp.textContent = "侵入・成功";
+      els.outcomeStamp.className = "stamp critical";
+      els.outcomeCard.className = "outcome-card critical";
+      els.outcomeHeadline.textContent = "防げませんでした";
+      els.outcomeBody.textContent = failText;
+    } else {
+      els.outcomeStamp.textContent = "防御・成功";
+      els.outcomeStamp.className = "stamp safe";
+      els.outcomeCard.className = "outcome-card safe";
+      els.outcomeHeadline.textContent = "防げました";
+      els.outcomeBody.textContent = successText;
+    }
+    showScreen("outcome");
+  }
+
+  els.outcomeMenuBtn.addEventListener("click", function () { showScreen("menu"); });
+  els.outcomeRetryBtn.addEventListener("click", function () {
+    if (currentReplay) { currentReplay(); }
+  });
+
+  // ---- omen (scareware) engine ----
+  var omenTimerInterval = null;
+
+  function startOmen() {
+    quizState.key = null;
+    currentReplay = startOmen;
+    els.omenStage.innerHTML = '';
+    var intro = els.omenIntro;
+    els.omenStage.appendChild(intro);
+    showScreen("omen");
+  }
+
+  els.omenStartBtn.addEventListener("click", triggerOmenPopups);
+
+  function triggerOmenPopups() {
+    els.omenStage.innerHTML = "";
+
+    var flash = document.createElement("div");
+    flash.className = "omen-title-flash";
+    flash.textContent = "⚠ ウイルスに感染しました ⚠";
+    els.omenStage.appendChild(flash);
+
+    var messages = [
+      { top: "18%", left: "7%", brand: "🛡 Windows セキュリティセンター", icon: "🛡️", msg: "ウイルススキャンが完了しました。3件の重大な脅威を検出しました。" },
+      { top: "34%", left: "9%", brand: "🛡 Windows セキュリティセンター", icon: "⚠️", msg: "個人情報が外部に送信されようとしています。今すぐ保護を有効にしてください。" },
+      { top: "50%", left: "6%", brand: "🛡 Windows セキュリティセンター", icon: "📵", msg: "感染の除去には認定サポートによる対応が必要です。下の番号にお電話ください。" }
+    ];
+
+    var seconds = 20;
+    var omenResolved = false;
+
+    messages.forEach(function (m, i) {
+      setTimeout(function () { spawnPopup(m, i === messages.length - 1); }, 600 + i * 900);
+    });
+
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function shakePopup(pop) {
+      if (reduceMotion) {
+        pop.style.outline = "2px solid #b7402f";
+        setTimeout(function () { pop.style.outline = "none"; }, 250);
+        return;
+      }
+      pop.style.animation = "none";
+      void pop.offsetWidth;
+      pop.style.animation = "shake 0.35s ease";
+    }
+
+    function spawnPopup(m, isLast) {
+      var pop = document.createElement("div");
+      pop.className = "omen-popup";
+      pop.style.top = m.top;
+      pop.style.left = m.left;
+      var html =
+        '<div class="bar"><span>' + m.brand + '</span><button class="omen-x" type="button">✕</button></div>' +
+        '<div class="content">' +
+          '<span class="warn-icon">' + m.icon + '</span>' +
+          '<div class="msg">' + m.msg + '</div>';
+      if (isLast) {
+        html += '<button class="call-btn">📞 今すぐこちらへお電話ください<br>0120-XXX-XXX</button>' +
+                '<div class="timer" id="omen-timer">このままでは 00:' + seconds + ' 後にデータが失われます</div>';
+      }
+      html += '</div>';
+      pop.innerHTML = html;
+      els.omenStage.appendChild(pop);
+
+      var xBtn = pop.querySelector(".omen-x");
+      xBtn.addEventListener("click", function () { shakePopup(pop); });
+
+      if (isLast) {
+        var callBtn = pop.querySelector(".call-btn");
+        callBtn.addEventListener("click", function () { endOmen("called"); });
+        var timerEl = pop.querySelector("#omen-timer");
+        clearInterval(omenTimerInterval);
+        omenTimerInterval = setInterval(function () {
+          seconds--;
+          if (seconds <= 0) {
+            seconds = 0;
+            timerEl.textContent = "このままでは 00:00 後にデータが失われます";
+            clearInterval(omenTimerInterval);
+            if (!omenResolved) { endOmen("waited"); }
+            return;
+          }
+          timerEl.textContent = "このままでは 00:" + String(seconds).padStart(2, "0") + " 後にデータが失われます";
+        }, 1000);
+      }
+    }
+
+    function endOmen(result) {
+      if (omenResolved) { return; }
+      omenResolved = true;
+      clearInterval(omenTimerInterval);
+      if (result === "called") {
+        showOutcome(
+          true,
+          "",
+          "電話をかけてしまいました。電話の先にいたのは、サポート詐欺の犯人でした。指示されるまま画面の操作を許可してしまい、パソコンの中の情報が持ち出されてしまいました。実は、これとそっくりの画面が実際に表示された事例があります。次のスライドで見てみましょう。"
+        );
+      } else {
+        showOutcome(
+          false,
+          "画面に惑わされず、何もせず待つことができました。実は、「今すぐ電話しないとデータが消える」というあの表示自体が、あなたを慌てさせるための嘘でした。時間が経っても、何も起きません。実は、これとそっくりな画面が実際に表示された事例があります。次のスライドで見てみましょう。",
+          ""
+        );
+      }
+    }
+  }
+
+  // ---- phishing mail engine ----
+  var INBOX = [
+    {
+      real: true,
+      sender: "厚生労働省",
+      avatar: "厚",
+      subject: "【至急】医療情報システムのご確認",
+      preview: "システム改修に伴い、ログイン情報の再確認をお願いします…",
+      time: "9:42"
+    },
+    {
+      real: false,
+      sender: "◯◯訪問看護ステーション事務局",
+      avatar: "事",
+      subject: "来月のシフト希望について",
+      preview: "来月分のシフト希望を今週中に提出してください…",
+      time: "8:15",
+      body: "お疲れ様です。事務局です。\n\n来月分のシフト希望を、今週金曜までに共有フォルダの用紙にご記入のうえ提出してください。\n\nよろしくお願いいたします。"
+    },
+    {
+      real: false,
+      sender: "Amazon",
+      avatar: "A",
+      subject: "ご注文の確認",
+      preview: "ご注文いただきありがとうございます。発送は…",
+      time: "昨日",
+      body: "この度はご注文いただきありがとうございます。\n\nご注文商品は、通常2〜3日以内に発送いたします。発送が完了しましたら、改めてご連絡いたします。"
+    }
+  ];
+
+  function startPhishing() {
+    quizState.key = null;
+    currentReplay = startPhishing;
+    els.mailFromRaw.hidden = true;
+    els.mailRevealBtn.disabled = false;
+    els.mailRevealBtn.textContent = "差出人のアドレスを確認する";
+    els.fakeId.value = "";
+    els.fakePw.value = "";
+    renderMailInbox();
+    showScreen("mailInbox");
+  }
+
+  function renderMailInbox() {
+    els.mailList.innerHTML = "";
+    INBOX.forEach(function (mail) {
+      var item = document.createElement("button");
+      item.className = "mail-item";
+      item.innerHTML =
+        '<span class="avatar">' + mail.avatar + '</span>' +
+        '<span class="body">' +
+          '<span class="row1"><span class="sender">' + mail.sender + '</span><span class="time">' + mail.time + '</span></span>' +
+          '<div class="subject">' + mail.subject + '</div>' +
+          '<div class="preview">' + mail.preview + '</div>' +
+        '</span>';
+      if (mail.real) {
+        item.addEventListener("click", function () { showScreen("mailView"); });
+      } else {
+        item.addEventListener("click", function () { openNormalMail(mail); });
+      }
+      els.mailList.appendChild(item);
+    });
+  }
+
+  function openNormalMail(mail) {
+    els.mailNormalSender.textContent = mail.sender;
+    els.mailNormalSubject.textContent = mail.subject;
+    els.mailNormalBody.textContent = mail.body || mail.preview;
+    showScreen("mailNormal");
+  }
+
+  els.mailInboxBack.addEventListener("click", function () { showScreen("menu"); });
+  els.mailViewBack.addEventListener("click", function () { showScreen("mailInbox"); });
+  els.mailNormalBack.addEventListener("click", function () { showScreen("mailInbox"); });
+
+  els.mailRevealBtn.addEventListener("click", function () {
+    els.mailFromRaw.hidden = false;
+    els.mailRevealBtn.disabled = true;
+    els.mailRevealBtn.textContent = "確認済み";
+  });
+
+  els.mailLinkBtn.addEventListener("click", function () { showScreen("mailLogin"); });
+
+  els.mailOfficialBtn.addEventListener("click", function () {
+    showOutcome(
+      false,
+      "よくできました。「厚生労働省」の名前や「至急」という言葉に惑わされず、リンクを踏まずに確認できました。次のスライドで、こうした手口が実際に医療現場を狙っている実態を見てみましょう。",
+      ""
+    );
+  });
+
+  els.fakeSubmitBtn.addEventListener("click", function () {
+    showOutcome(
+      true,
+      "",
+      "カルテのIDとパスワードを入力して送信してしまいました。このページは本物そっくりに作られた偽のログイン画面で、入力した情報はそのまま盗まれてしまいます。盗まれた1つのID・パスワードが、そのまま不正アクセスやランサムウェア被害の入口になることがあります。警察庁の集計では、2024年上半期のランサムウェア被害の約82.9%が、こうした日常の隙を突かれた侵入から始まっています。次のスライドで、こうした手口の実態を見てみましょう。"
+    );
+  });
+
+  els.fakeBackBtn.addEventListener("click", function () {
+    showOutcome(
+      false,
+      "リンクは開いてしまいましたが、この画面のおかしさに気づいて、情報を入力せずに閉じることができました。次のスライドで、こうした手口が実際に医療現場を狙っている実態を見てみましょう。",
+      ""
+    );
+  });
+
+  renderMenu();
+})();
+</script>
+
+</body>
+</html>
