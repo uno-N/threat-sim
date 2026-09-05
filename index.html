@@ -302,6 +302,65 @@
     cursor: pointer;
   }
 
+  /* review of choices on the outcome screen */
+  .review-heading {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin: 6px 0 12px;
+  }
+  .review-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+  .review-item {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .review-item .review-q {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .review-item .review-choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .review-item .badge {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-top: 2px;
+  }
+  .badge.safe { color: var(--safe); background: var(--safe-bg); border: 1px solid var(--safe); }
+  .badge.critical { color: var(--critical); background: var(--critical-bg); border: 1px solid var(--critical); }
+  .review-item .review-explain {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.95;
+    color: var(--ink);
+    border-top: 1px dashed var(--line);
+    padding-top: 10px;
+  }
+  .intro-note {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 2;
+  }
+  .intro-note strong { font-family: var(--font-display); color: var(--accent); }
+
   /* ===== omen (scareware) screen ===== */
   #screen-omen { padding: 0; position: relative; background: #05070a; overflow: hidden; }
   .omen-stage { position: relative; flex: 1; min-height: 100vh; display: flex; align-items: flex-end; }
@@ -583,6 +642,10 @@
       <p class="headline" id="outcome-headline"></p>
       <p class="body-text" id="outcome-body"></p>
     </div>
+    <div id="outcome-review-wrap" hidden>
+      <p class="review-heading">あなたの選択と解説</p>
+      <div class="review-list" id="outcome-review"></div>
+    </div>
     <button class="primary-btn" id="outcome-menu-btn">画面に戻って発表を聞く</button>
     <button class="ghost-btn" id="outcome-retry-btn">もう一度、この脅威を選び直す</button>
   </div>
@@ -684,32 +747,76 @@
   var GAMES = {
     access: {
       title: "不正アクセス編",
-      sub: "保守用の接続、共有アカウント、退職者のID",
+      sub: "保守用の接続、使い回しのパスワード、退職者のID",
+      intro: "不正アクセスとは、壁を壊して侵入するようなハッキングではなく、多くの場合、<strong>「正規の鍵（ID・パスワード）を、正規でない人が使う」</strong>ことで起きます。<br><br>ここから4つの場面で、あなたの事業所ならどう動くか、体験してみましょう。すべて、2024年に岡山県精神科医療センターで実際に起きた事案がモデルになっています。",
       questions: [
         {
-          text: "システムの保守をお願いしている業者さんから連絡がありました。「遠隔でメンテナンスするための機械が古くなっているので、安全のために新しくしたいのですが、少しお時間をいただけますか」とのこと。ちょうど今月は人手が足りず、現場はバタバタしている。",
+          short: "保守用VPN装置の更新",
+          text: "システムの保守をお願いしている業者さんから連絡がありました。「遠隔でメンテナンスするための機械（VPN装置）が古くなっているので、安全のために新しくしたいのですが、少しお時間をいただけますか」とのこと。ちょうど今月は人手が足りず、現場はバタバタしている。",
           choices: [
-            { label: "多少バタバタしていても、日程を調整してすぐにお願いする", safe: true },
-            { label: "今は緊急のトラブルが起きているわけでもないし、落ち着いた時期にまとめてお願いすることにする", safe: false }
+            {
+              label: "多少バタバタしていても、日程を調整してすぐにお願いする",
+              safe: true,
+              explain: "これが正解です。実はこの場面、岡山県精神科医療センターで実際に起きたことがモデルになっています。同センターでは保守用VPN装置の更新が先送りにされ続け、そこが侵入口になったと調査報告書で指摘されています。当時の常務理事は会見で「VPN機器の更新が行われていれば、今回の攻撃を防げたかもしれない」と語りました。「忙しいから後で」が、最大4万人分の情報漏えいと約3か月のシステム停止につながっています。"
+            },
+            {
+              label: "今は緊急のトラブルが起きているわけでもないし、落ち着いた時期にまとめてお願いすることにする",
+              safe: false,
+              explain: "これは、岡山県精神科医療センターで実際に選ばれてしまった対応そのものです。緊急のトラブルが起きていないことと、安全であることは別問題です。むしろ、更新が放置されている今この瞬間こそ、外部から狙われやすい状態だったというのが、この事案の教訓です。"
+            }
           ]
         },
         {
-          text: "新しく入ったスタッフに、電子カルテの使い方を教えることになった。今日から使ってもらいたいが、新しいIDを発行するにはベンダーに連絡してから3日ほどかかるらしい。",
+          short: "事業所全体で同じパスワード",
+          text: "事業所にはパソコンが5台。ログインのパスワードは、どの端末も、誰が使っても同じ「共通パスワード」で運用されています。新しく入ったスタッフからは「どの席でもすぐ使えて便利ですね」と言われました。管理者から「覚えるのも楽だし、しばらくこのままでいいよね？」と相談されています。",
           choices: [
-            { label: "3日待って、新しいIDを発行してもらってから使い始めてもらう", safe: true },
-            { label: "今日からすぐ動いてもらいたいので、とりあえず先輩スタッフのIDとパスワードを教えて使ってもらう", safe: false }
+            {
+              label: "人ごと・端末ごとにIDとパスワードを分ける方向で、システム担当者と見直しを始める",
+              safe: true,
+              explain: "これが正解です。「一人一ID」は、今日からできる対策の中でも特に効果が高いものです。手間は増えますが、1つのパスワードが漏れても被害がその人の範囲で止まる、「誰が何をしたか」を後から追える、という2つの守りが手に入ります。岡山の事案の被害規模（最大4万人・復旧まで約3か月）と比べれば、小さなコストです。"
+            },
+            {
+              label: "現場は回っているし、覚えることも少なくて済むので、共通パスワードのままにしておく",
+              safe: false,
+              explain: "これは、岡山県精神科医療センターの被害を拡大させた原因と同じ構造です。あの事案では、院内すべてのWindowsパソコンの管理者アカウントが、同じID・同じパスワードで運用されていました。1つの鍵が破られただけで、建物中すべての部屋の鍵が同時に開いてしまったのです。パスワードを共有すると、1か所の突破がシステム全体の突破に直結するだけでなく、「誰が何をしたか」が後から追えなくなります。"
+            }
           ]
         },
         {
+          short: "機器をまたいだパスワードの使い回し",
+          text: "保守業者さんがVPN装置の設定をしてくれています。「管理者のパスワード、忘れないようにパソコンのと同じにしておきますね。administrator と、いつものやつで」と言われました。確かに、別々にすると覚えられない気もする。",
+          choices: [
+            {
+              label: "VPN装置は外から直接届く場所なので、パソコンとは別の、推測されにくいパスワードにしてもらう",
+              safe: true,
+              explain: "これが正解です。VPN装置は「土地の外」から直接たどり着ける唯一の入口で、パソコンとは危険度が違います。岡山の事案では、このVPN装置の管理者ID・パスワードが「administrator／P@ssw0rd」という推測されやすいもので、しかも院内全パソコンの管理者アカウントと同じでした。外の門の鍵と、家の中すべての部屋の鍵が同じだった、ということです。入口の鍵だけは別にする。これだけで、侵入されても被害が「門の内側の1か所」で止まる可能性が生まれます。"
+            },
+            {
+              label: "覚えやすいほうが運用も安定するので、パソコンと同じパスワードでお願いする",
+              safe: false,
+              explain: "これは、岡山県精神科医療センターで実際に起きていた状態です。VPN装置の管理者ID・パスワードが「administrator／P@ssw0rd」という推測されやすいもので、院内すべてのパソコンの管理者アカウントとも同じでした。攻撃者は、更新が放置されたVPN装置から入り、その鍵をそのまま使って院内のパソコンを次々に開けていきました。調査報告書は、この病院が過去に他院（半田病院、大阪急性期・総合医療センター）で指摘された脆弱性と全く同じものを繰り返していたことも指摘しています。"
+            }
+          ]
+        },
+        {
+          short: "退職者アカウントの放置",
           text: "3ヶ月前に退職したスタッフがいる。システムの利用者一覧を見返していたら、そのスタッフのIDがまだ残っていることに気づいた。",
           choices: [
-            { label: "気づいたその日のうちに、システム担当者に連絡して削除・使えない状態にしてもらう", safe: true },
-            { label: "もう辞めた人だし、今さらログインもしないだろうから、次に整理するときでいいかと後回しにする", safe: false }
+            {
+              label: "気づいたその日のうちに、システム担当者に連絡して削除・使えない状態にしてもらう",
+              safe: true,
+              explain: "これが正解です。「一人一ID」「退職者アカウントの即時削除」は、今日からできる対策の中でも特に効果が高いものです。使われていないIDは、持ち主がいないのに開いたままの鍵と同じで、破られても誰も気づきません。"
+            },
+            {
+              label: "もう辞めた人だし、今さらログインもしないだろうから、次に整理するときでいいかと後回しにする",
+              safe: false,
+              explain: "この「今さら誰も使わないだろう」という考え方こそ、調査報告書が「思考停止が招いた人災」と呼んだものと同じ構造です。退職者アカウント自体は岡山の事案の直接の侵入口ではありませんが、「たぶん大丈夫」で先送りにされた小さな管理の甘さが積み重なる、という点では全く同じパターンです。報告書は「厚労省ガイドラインの順守で十分に防げた」と結論づけています。"
+            }
           ]
         }
       ],
-      success: "よくできました。実はこの3つの場面、すべて実際に起きた事件のきっかけがモデルになっています。次のスライドで、同じ状況で実際に何が起きた医療機関があるか見てみましょう。",
-      fail: "不正アクセスを許してしまいました。実際にこれと同じことが起きた医療機関では、サーバー約30台・端末244台が暗号化され、最大4万人分の情報が漏えいした可能性があり、復旧に3か月かかりました。次のスライドで、実際に何が起きたか見てみましょう。"
+      success: "よくできました。4つの場面はすべて、岡山県精神科医療センターの事案で実際に分岐点になった場面です。下に、あなたの選択ごとの解説があります。次のスライドで、実際に何が起きたか見てみましょう。",
+      fail: "不正アクセスを許してしまいました。同じ選択をした医療機関では、サーバー約30台・端末244台が暗号化され、最大4万人分の情報が漏えいした可能性があり、復旧に約3か月かかりました。下に、あなたの選択ごとの解説があります。次のスライドで、実際に何が起きたか見てみましょう。"
     },
 
     phishing: {
@@ -777,6 +884,8 @@
     outcomeCard: document.getElementById("outcome-card"),
     outcomeHeadline: document.getElementById("outcome-headline"),
     outcomeBody: document.getElementById("outcome-body"),
+    outcomeReviewWrap: document.getElementById("outcome-review-wrap"),
+    outcomeReview: document.getElementById("outcome-review"),
     outcomeMenuBtn: document.getElementById("outcome-menu-btn"),
     outcomeRetryBtn: document.getElementById("outcome-retry-btn"),
     omenStage: document.getElementById("omen-stage"),
@@ -838,10 +947,12 @@
   }
 
   // ---- quiz engine ----
-  var quizState = { key: null, index: 0, failed: false };
+  var quizState = { key: null, index: 0, failed: false, answers: [] };
 
   function startQuiz(key) {
-    quizState = { key: key, index: 0, failed: false };
+    var game = GAMES[key];
+    // index -1 = intro card (only when the game defines one)
+    quizState = { key: key, index: game.intro ? -1 : 0, failed: false, answers: [] };
     currentReplay = function () { startQuiz(key); };
     renderQuizQuestion();
     showScreen("quiz");
@@ -849,37 +960,78 @@
 
   function renderQuizQuestion() {
     var game = GAMES[quizState.key];
-    var q = game.questions[quizState.index];
     els.quizEyebrow.textContent = game.title.toUpperCase();
+    els.quizChoices.innerHTML = "";
+
+    if (quizState.index < 0) {
+      els.quizStep.textContent = "はじめに";
+      els.quizProgress.style.width = "0%";
+      els.quizText.innerHTML = '<div class="intro-note">' + game.intro + '</div>';
+      var startBtn = document.createElement("button");
+      startBtn.className = "primary-btn";
+      startBtn.style.marginTop = "0";
+      startBtn.textContent = "場面を見る →";
+      startBtn.addEventListener("click", function () {
+        quizState.index = 0;
+        renderQuizQuestion();
+        window.scrollTo(0, 0);
+      });
+      els.quizChoices.appendChild(startBtn);
+      return;
+    }
+
+    var q = game.questions[quizState.index];
     els.quizStep.textContent = "Q" + (quizState.index + 1) + " / " + game.questions.length;
     els.quizProgress.style.width = (((quizState.index) / game.questions.length) * 100) + "%";
     els.quizText.textContent = q.text;
-    els.quizChoices.innerHTML = "";
     var letters = ["A", "B"];
     q.choices.forEach(function (choice, i) {
       var btn = document.createElement("button");
       btn.className = "choice-btn";
       btn.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + choice.label + '</span>';
-      btn.addEventListener("click", function () { answerQuiz(choice.safe); });
+      btn.addEventListener("click", function () { answerQuiz(choice, letters[i]); });
       els.quizChoices.appendChild(btn);
     });
   }
 
-  function answerQuiz(safe) {
-    if (!safe) { quizState.failed = true; }
-    quizState.index++;
+  function answerQuiz(choice, letter) {
     var game = GAMES[quizState.key];
+    var q = game.questions[quizState.index];
+    if (!choice.safe) { quizState.failed = true; }
+    quizState.answers.push({ question: q, choice: choice, letter: letter });
+    quizState.index++;
     if (quizState.index >= game.questions.length) {
       els.quizProgress.style.width = "100%";
-      showOutcome(quizState.failed, game.success, game.fail);
+      showOutcome(quizState.failed, game.success, game.fail, quizState.answers);
     } else {
       renderQuizQuestion();
+      window.scrollTo(0, 0);
     }
+  }
+
+  function renderReview(answers) {
+    els.outcomeReview.innerHTML = "";
+    var hasExplain = answers && answers.some(function (a) { return a.choice.explain; });
+    if (!hasExplain) { els.outcomeReviewWrap.hidden = true; return; }
+    answers.forEach(function (a, i) {
+      var item = document.createElement("div");
+      item.className = "review-item";
+      var badge = a.choice.safe
+        ? '<span class="badge safe">防げた</span>'
+        : '<span class="badge critical">侵入された</span>';
+      item.innerHTML =
+        '<div class="review-q">Q' + (i + 1) + (a.question.short ? " — " + a.question.short : "") + '</div>' +
+        '<div class="review-choice">' + badge + '<span>' + a.letter + "　" + a.choice.label + '</span></div>' +
+        '<div class="review-explain">' + (a.choice.explain || "") + '</div>';
+      els.outcomeReview.appendChild(item);
+    });
+    els.outcomeReviewWrap.hidden = false;
   }
 
   els.quizBack.addEventListener("click", function () { showScreen("menu"); });
 
-  function showOutcome(failed, successText, failText) {
+  function showOutcome(failed, successText, failText, answers) {
+    renderReview(answers || []);
     if (failed) {
       els.outcomeStamp.textContent = "侵入・成功";
       els.outcomeStamp.className = "stamp critical";
