@@ -1375,6 +1375,7 @@
     els.mvSubject.textContent = mail.subject;
     els.mvBody.innerHTML = mail.body;
     els.mailViewPos.textContent = (INBOX.indexOf(mail) + 1) + " / " + INBOX.length;
+    showScreen("mailView");
 
     // links inside the body behave like the corresponding choice
     els.mvBody.querySelectorAll(".mail-link").forEach(function (lnk) {
