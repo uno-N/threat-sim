@@ -346,6 +346,7 @@
   }
   .badge.safe { color: var(--safe); background: var(--safe-bg); border: 1px solid var(--safe); }
   .badge.critical { color: var(--critical); background: var(--critical-bg); border: 1px solid var(--critical); }
+  .badge.caution { color: var(--caution); background: var(--caution-bg); border: 1px solid var(--caution); }
   .review-item .review-explain {
     font-family: var(--font-body);
     font-size: 14px;
@@ -461,108 +462,198 @@
     cursor: pointer;
   }
 
-  /* ===== mail (phishing) screens ===== */
-  .mail-list { display: flex; flex-direction: column; gap: 8px; }
+  /* ===== mail (phishing) screens — styled like a phone mail app ===== */
+  .mail-screen {
+    --m-bg: #1c1c1e;
+    --m-row: #1c1c1e;
+    --m-row-active: #2c2c2e;
+    --m-sep: #3a3a3c;
+    --m-text: #f2f2f7;
+    --m-sub: #98989f;
+    --m-blue: #0a84ff;
+    --m-search: #2c2c2e;
+    padding: 0 0 32px;
+    background: var(--m-bg);
+    color: var(--m-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Helvetica Neue", sans-serif;
+    animation: none;
+  }
+  .mail-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 12px 6px;
+    min-height: 44px;
+  }
+  .mail-nav-btn {
+    background: none;
+    border: none;
+    color: var(--m-blue);
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 6px 4px;
+  }
+  .mail-nav-btn:disabled { color: var(--m-sub); cursor: default; }
+  .mail-nav-title { font-size: 13px; color: var(--m-sub); }
+  .mail-nav-icons { color: var(--m-blue); font-size: 16px; letter-spacing: 0.35em; }
+
+  .mail-big-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 4px 16px 10px;
+  }
+  .mail-search {
+    margin: 0 16px 8px;
+    background: var(--m-search);
+    color: var(--m-sub);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 15px;
+  }
+  .mail-list { display: flex; flex-direction: column; }
   .mail-item {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    background: var(--paper-raised);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 14px 14px;
+    gap: 6px;
+    background: var(--m-row);
+    border: none;
+    border-bottom: 1px solid var(--m-sep);
+    padding: 12px 16px 12px 10px;
     cursor: pointer;
     text-align: left;
     font-family: inherit;
-    color: var(--ink);
+    color: var(--m-text);
+    width: 100%;
   }
-  .mail-item.filler { opacity: 0.55; cursor: default; }
-  .mail-item .avatar {
-    width: 34px; height: 34px;
+  .mail-item:active { background: var(--m-row-active); }
+  .mail-item .dot {
+    width: 10px; height: 10px;
     border-radius: 50%;
-    background: var(--accent);
-    color: var(--accent-ink);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 14px;
+    background: var(--m-blue);
+    margin-top: 6px;
     flex-shrink: 0;
   }
+  .mail-item .dot.read { background: transparent; }
+  .mail-item .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin: 0 8px 0 4px;
+  }
   .mail-item .body { flex: 1; min-width: 0; }
-  .mail-item .row1 { display: flex; justify-content: space-between; gap: 8px; }
-  .mail-item .sender { font-weight: 700; font-size: 14px; }
-  .mail-item .time { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); flex-shrink: 0; }
-  .mail-item .subject { font-size: 13.5px; font-weight: 600; margin-top: 2px; }
+  .mail-item .row1 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .mail-item .sender { font-weight: 700; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mail-item .time { font-size: 14px; color: var(--m-sub); flex-shrink: 0; }
+  .mail-item .subject { font-size: 15px; font-weight: 500; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .mail-item .preview {
-    font-family: var(--font-body);
-    font-size: 12.5px;
-    color: var(--ink-soft);
+    font-size: 14px;
+    color: var(--m-sub);
     margin-top: 2px;
-    white-space: nowrap;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+  }
+  .mail-item .done {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--m-sub);
+    border: 1px solid var(--m-sep);
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+  .mail-count {
+    text-align: center;
+    font-size: 12px;
+    color: var(--m-sub);
+    padding: 14px 16px 0;
+  }
+  .mail-result-btn {
+    margin: 18px 16px 0;
+    background: var(--m-blue);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
   }
 
-  .mail-detail {
-    background: var(--paper-raised);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 18px 18px 20px;
-    box-shadow: var(--shadow);
-    margin-bottom: 18px;
+  /* message view */
+  .mail-view-head {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 6px 16px 14px;
+    border-bottom: 1px solid var(--m-sep);
   }
-  .mail-field { padding: 10px 0; border-bottom: 1px solid var(--line); }
-  .mail-field:last-of-type { border-bottom: none; }
-  .mail-field-label {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.08em;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 4px;
+  .mail-view-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
   }
-  .mail-field-value { font-size: 15px; font-weight: 600; }
-  .mail-reveal-btn {
-    display: block;
-    margin-top: 8px;
+  .mail-view-meta { flex: 1; min-width: 0; font-size: 14px; line-height: 1.5; }
+  .mv-sender { font-weight: 700; font-size: 16px; }
+  .mv-addr { font-weight: 400; color: var(--m-sub); font-size: 13px; word-break: break-all; }
+  .mv-to, .mv-date { color: var(--m-sub); font-size: 13px; }
+  .mv-subject { font-size: 18px; font-weight: 700; margin: 14px 16px 6px; line-height: 1.4; }
+  .mv-body {
+    padding: 8px 16px 18px;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--m-text);
+    border-bottom: 1px solid var(--m-sep);
+  }
+  .mv-body p { margin: 0 0 12px; }
+  .mv-body .sig { color: var(--m-sub); font-size: 13.5px; line-height: 1.7; }
+  .mv-body .file-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--m-row-active);
+    border: 1px solid var(--m-sep);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: var(--m-text);
+  }
+  .mv-body .file-chip .ext { font-size: 11px; color: var(--m-sub); border: 1px solid var(--m-sub); border-radius: 3px; padding: 0 4px; }
+  .mail-link {
+    color: var(--m-blue);
+    text-decoration: underline;
     background: none;
-    border: 1px solid var(--line);
-    color: var(--accent);
-    border-radius: 7px;
-    padding: 7px 10px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
+    border: none;
+    font-family: inherit;
+    font-size: 15px;
     cursor: pointer;
-  }
-  .mail-from-raw {
-    margin-top: 8px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    background: var(--paper);
-    border: 1px dashed var(--line);
-    border-radius: 6px;
-    padding: 8px 10px;
+    padding: 0;
     word-break: break-all;
   }
-  .mail-body {
-    font-family: var(--font-body);
-    font-size: 15px;
-    line-height: 2;
-    padding-top: 12px;
+  .mv-actions { padding: 18px 16px 0; }
+  .mv-actions-label { font-size: 13px; color: var(--m-sub); margin: 0 0 10px; }
+  .mail-screen .choice-btn {
+    background: var(--m-row-active);
+    border-color: var(--m-sep);
+    color: var(--m-text);
+    font-family: inherit;
   }
-  #mail-normal-body { white-space: pre-line; }
-  .mail-link-btn {
-    background: var(--caution-bg);
-    color: var(--caution);
-    border: 1px solid var(--caution);
-    border-radius: 7px;
-    padding: 10px 14px;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-  }
+  .mail-screen .choice-btn:hover { border-color: var(--m-blue); }
+  .mail-screen .choice-btn:active { background: #3a3a3c; }
+  .mail-screen .choice-btn .letter { color: var(--m-blue); }
 
   .fake-login-card {
     background: #fff;
@@ -663,43 +754,40 @@
   </div>
 
   <!-- MAIL INBOX -->
-  <div class="screen" id="screen-mail-inbox">
-    <div class="progress-row">
-      <button class="back" id="mail-inbox-back">← 選び直す</button>
-      <span class="step">受信トレイ</span>
+  <div class="screen mail-screen" id="screen-mail-inbox">
+    <div class="mail-nav">
+      <button class="mail-nav-btn" id="mail-inbox-back">‹ 選び直す</button>
+      <span class="mail-nav-title"></span>
+      <button class="mail-nav-btn" disabled>編集</button>
     </div>
-    <p class="lede" style="margin-bottom:18px;">今朝、スマホにこのメールが届いています。気になるものがあれば開いてみてください。</p>
+    <h2 class="mail-big-title">受信</h2>
+    <div class="mail-search">🔍 検索</div>
     <div class="mail-list" id="mail-list"></div>
+    <div class="mail-count" id="mail-count"></div>
+    <button class="mail-result-btn" id="mail-result-btn" hidden>3通の対応を振り返る →</button>
   </div>
 
   <!-- MAIL VIEW -->
-  <div class="screen" id="screen-mail-view">
-    <div class="progress-row">
-      <button class="back" id="mail-view-back">← 受信トレイ</button>
-      <span class="step">CASE 02 — フィッシング</span>
+  <div class="screen mail-screen" id="screen-mail-view">
+    <div class="mail-nav">
+      <button class="mail-nav-btn" id="mail-view-back">‹ 受信</button>
+      <span class="mail-nav-title" id="mail-view-pos"></span>
+      <span class="mail-nav-icons">⌫ ↩ ⚑</span>
     </div>
-    <div class="mail-detail">
-      <div class="mail-field">
-        <span class="mail-field-label">差出人</span>
-        <span class="mail-field-value">厚生労働省</span>
-        <button class="mail-reveal-btn" id="mail-reveal-btn">差出人のアドレスを確認する</button>
-        <div class="mail-from-raw" id="mail-from-raw" hidden>info@mhlw-johokanri.jp</div>
-      </div>
-      <div class="mail-field">
-        <span class="mail-field-label">件名</span>
-        <span class="mail-field-value">【至急】医療情報システムのご確認</span>
-      </div>
-      <div class="mail-body">
-        平素より医療情報システムをご利用いただき、誠にありがとうございます。<br><br>
-        このたび、医療情報システムの改修に伴い、ログイン情報の再確認をお願いしております。<br><br>
-        下記より、お手続きをお願いいたします。<br><br>
-        <button class="mail-link-btn" id="mail-link-btn">🔗 ログイン情報を確認する</button>
-        <br><br>
-        ※本手続きが完了しない場合、システムがご利用いただけなくなる可能性がございます。<br><br>
-        厚生労働省 医療情報システム推進室
+    <div class="mail-view-head">
+      <div class="mail-view-avatar" id="mv-avatar"></div>
+      <div class="mail-view-meta">
+        <div class="mv-sender"><span id="mv-sender"></span> <span class="mv-addr" id="mv-addr"></span></div>
+        <div class="mv-to">宛先: <span id="mv-to"></span></div>
+        <div class="mv-date" id="mv-date"></div>
       </div>
     </div>
-    <button class="primary-btn" id="mail-official-btn">リンクは押さず、公式サイトで確認する</button>
+    <h3 class="mv-subject" id="mv-subject"></h3>
+    <div class="mv-body" id="mv-body"></div>
+    <div class="mv-actions">
+      <p class="mv-actions-label">あなたはどうしますか？</p>
+      <div class="choice-list" id="mv-choices"></div>
+    </div>
   </div>
 
   <!-- MAIL FAKE LOGIN -->
@@ -720,25 +808,6 @@
     </div>
   </div>
 
-  <!-- MAIL NORMAL (filler emails) -->
-  <div class="screen" id="screen-mail-normal">
-    <div class="progress-row">
-      <button class="back" id="mail-normal-back">← 受信トレイ</button>
-      <span class="step">通常のメール</span>
-    </div>
-    <div class="mail-detail">
-      <div class="mail-field">
-        <span class="mail-field-label">差出人</span>
-        <span class="mail-field-value" id="mail-normal-sender"></span>
-      </div>
-      <div class="mail-field">
-        <span class="mail-field-label">件名</span>
-        <span class="mail-field-value" id="mail-normal-subject"></span>
-      </div>
-      <div class="mail-body" id="mail-normal-body"></div>
-    </div>
-    <p class="lede" style="margin-bottom:0;">これは特に怪しい点のない、普段どおりのメールです。受信トレイに戻って、他のメールも確認してみてください。</p>
-  </div>
 
 </div>
 
@@ -854,8 +923,7 @@
       omen: document.getElementById("screen-omen"),
       mailInbox: document.getElementById("screen-mail-inbox"),
       mailView: document.getElementById("screen-mail-view"),
-      mailLogin: document.getElementById("screen-mail-login"),
-      mailNormal: document.getElementById("screen-mail-normal")
+      mailLogin: document.getElementById("screen-mail-login")
     },
     quizStep: document.getElementById("quiz-step"),
     quizProgress: document.getElementById("quiz-progress"),
@@ -875,20 +943,23 @@
     omenIntro: document.getElementById("omen-intro"),
     omenStartBtn: document.getElementById("omen-start-btn"),
     mailList: document.getElementById("mail-list"),
+    mailCount: document.getElementById("mail-count"),
+    mailResultBtn: document.getElementById("mail-result-btn"),
     mailInboxBack: document.getElementById("mail-inbox-back"),
     mailViewBack: document.getElementById("mail-view-back"),
-    mailRevealBtn: document.getElementById("mail-reveal-btn"),
-    mailFromRaw: document.getElementById("mail-from-raw"),
-    mailLinkBtn: document.getElementById("mail-link-btn"),
-    mailOfficialBtn: document.getElementById("mail-official-btn"),
+    mailViewPos: document.getElementById("mail-view-pos"),
+    mvAvatar: document.getElementById("mv-avatar"),
+    mvSender: document.getElementById("mv-sender"),
+    mvAddr: document.getElementById("mv-addr"),
+    mvTo: document.getElementById("mv-to"),
+    mvDate: document.getElementById("mv-date"),
+    mvSubject: document.getElementById("mv-subject"),
+    mvBody: document.getElementById("mv-body"),
+    mvChoices: document.getElementById("mv-choices"),
     fakeId: document.getElementById("fake-id"),
     fakePw: document.getElementById("fake-pw"),
     fakeSubmitBtn: document.getElementById("fake-submit-btn"),
-    fakeBackBtn: document.getElementById("fake-back-btn"),
-    mailNormalBack: document.getElementById("mail-normal-back"),
-    mailNormalSender: document.getElementById("mail-normal-sender"),
-    mailNormalSubject: document.getElementById("mail-normal-subject"),
-    mailNormalBody: document.getElementById("mail-normal-body")
+    fakeBackBtn: document.getElementById("fake-back-btn")
   };
 
   var currentReplay = null;
@@ -999,9 +1070,12 @@
     answers.forEach(function (a, i) {
       var item = document.createElement("div");
       item.className = "review-item";
-      var badge = a.choice.safe
+      var kind = a.choice.result || (a.choice.safe ? "safe" : "critical");
+      var badge = kind === "safe"
         ? '<span class="badge safe">防げた</span>'
-        : '<span class="badge critical">侵入された</span>';
+        : kind === "caution"
+          ? '<span class="badge caution">業務が止まった</span>'
+          : '<span class="badge critical">侵入された</span>';
       item.innerHTML =
         '<div class="review-q">Q' + (i + 1) + (a.question.short ? " — " + a.question.short : "") + '</div>' +
         '<div class="review-choice">' + badge + '<span>' + a.letter + "　" + a.choice.label + '</span></div>' +
@@ -1144,109 +1218,233 @@
   }
 
   // ---- phishing mail engine ----
+  // 3 mails land in the station's shared inbox. Every one of them needs a decision.
   var INBOX = [
     {
-      real: true,
+      id: "mhlw",
       sender: "厚生労働省",
+      addr: "<info@mhlw-johokanri.jp>",
       avatar: "厚",
+      color: "#5b7fb5",
+      to: "〇〇訪問看護ステーション 代表アドレス",
+      time: "9:42",
+      date: "今日 9:42",
       subject: "【至急】医療情報システムのご確認",
-      preview: "システム改修に伴い、ログイン情報の再確認をお願いします…",
-      time: "9:42"
+      preview: "平素より医療情報システムをご利用いただき、誠にありがとうございます。このたび、医療情報システムの改修に伴い、ログイン情報の再確認を…",
+      body:
+        "<p>平素より医療情報システムをご利用いただき、誠にありがとうございます。</p>" +
+        "<p>このたび、医療情報システムの改修に伴い、ログイン情報の再確認をお願いしております。下記より、お手続きをお願いいたします。</p>" +
+        "<p><button class=\"mail-link\" data-action=\"login\">https://mhlw-johokanri.jp/confirm/login</button></p>" +
+        "<p>※本手続きが<strong>本日中</strong>に完了しない場合、システムがご利用いただけなくなる可能性がございます。</p>" +
+        "<p class=\"sig\">厚生労働省 医療情報システム推進室<br>〒100-8916 東京都千代田区霞が関1-2-2</p>",
+      choices: [
+        {
+          label: "メール内のリンクを開いて、ログイン情報を確認する",
+          action: "login"
+        },
+        {
+          label: "リンクは押さず、システムの保守業者か、厚生労働省の公式サイトで確認する",
+          result: "safe",
+          explain: "これが正解です。見るべき点は3つありました。差出人のアドレスが「mhlw-johokanri.jp」で、国の機関の「go.jp」ではないこと。厚生労働省が個々の事業所にメールでログイン情報の確認を求めることはないこと。そして「至急」「本日中」と急がせていること。フィッシングは「正規の鍵を、正規でない人が使う」ための鍵の集め方です。リンクを押す前に、いつもの連絡先に確認する。この一手間が、鍵を渡さない唯一の方法です。"
+        }
+      ],
+      // outcomes of the fake login page reached from the link
+      linkOutcomes: {
+        submit: {
+          label: "リンクを開き、カルテIDとパスワードを入力して送信した",
+          result: "critical",
+          explain: "カルテのIDとパスワードを入力して送信してしまいました。開いたページは本物そっくりに作られた偽のログイン画面で、入力した情報はそのまま盗まれます。差出人のアドレスは「mhlw-johokanri.jp」で、国の機関の「go.jp」ではありませんでした。盗まれた1つのID・パスワードが、そのまま不正アクセスやランサムウェア被害の入口になります。警察庁の集計では、2024年上半期のランサムウェア被害の約82.9%が、こうした日常の隙を突かれた侵入から始まっています。"
+        },
+        back: {
+          label: "リンクは開いたが、画面のおかしさに気づいて、入力せずに閉じた",
+          result: "safe",
+          explain: "リンクは開いてしまいましたが、情報を入力せずに閉じることができました。鍵は渡していないので、防げています。ただ、本来はリンクを押す前に止まれたはずです。差出人のアドレスが「mhlw-johokanri.jp」で「go.jp」ではないこと、厚生労働省が事業所にメールでログイン情報を求めることはないこと、「至急」「本日中」と急がせていること。この3点は、開く前に見えていました。"
+        }
+      }
     },
     {
-      real: false,
-      sender: "◯◯訪問看護ステーション事務局",
+      id: "shift",
+      sender: "〇〇訪問看護ステーション 事務局",
+      addr: "<jimu@marumaru-houkan.jp>",
       avatar: "事",
-      subject: "来月のシフト希望について",
-      preview: "来月分のシフト希望を今週中に提出してください…",
+      color: "#3f8f7a",
+      to: "全スタッフ",
       time: "8:15",
-      body: "お疲れ様です。事務局です。\n\n来月分のシフト希望を、今週金曜までに共有フォルダの用紙にご記入のうえ提出してください。\n\nよろしくお願いいたします。"
+      date: "今日 8:15",
+      subject: "10月分シフト希望の提出について（9/12締切）",
+      preview: "お疲れ様です。事務局です。10月分のシフト希望を、9月12日（金）までに共有フォルダの希望表にご記入ください。今月は…",
+      body:
+        "<p>お疲れ様です。事務局です。</p>" +
+        "<p>10月分のシフト希望を、<strong>9月12日（金）</strong>までに、いつもの共有フォルダの希望表にご記入ください。</p>" +
+        "<p><span class=\"file-chip\">📁 共有フォルダ ＞ シフト ＞ 2026年10月_希望表 <span class=\"ext\">XLSX</span></span></p>" +
+        "<p>今月は研修日（9/26）があるため、その日の希望は入れないようお願いします。不明点は事務局まで。</p>" +
+        "<p class=\"sig\">〇〇訪問看護ステーション 事務局<br>内線 200</p>",
+      choices: [
+        {
+          label: "差出人と内容を確認して、いつもどおり共有フォルダの希望表に記入する",
+          result: "safe",
+          explain: "これが正解です。差出人のアドレスは自事業所のドメイン、宛先は全スタッフ、内容は毎月の業務の流れと一致し、開くのはメールのリンクではなく、いつもの共有フォルダ。確認すべき点がすべて揃っています。フィッシング対策は「全部を疑う」ことではありません。差出人のアドレス、宛先、内容の文脈、リンク先、この4点を見る習慣です。それができれば、普段のメールは普段どおりに処理できます。"
+        },
+        {
+          label: "外部からのメールと区別がつかないので、開かずにそのまま放置する",
+          result: "caution",
+          explain: "侵入はされていませんが、シフト表が締切に出ず、業務が止まりました。「全部を疑う」は、一見安全に見えて、実は続きません。続かない対策は、いずれ「面倒だから全部開く」に戻ります。このメールは、差出人のアドレスが自事業所のドメイン、宛先は全スタッフ、内容は毎月の流れと一致、開く先はメールのリンクではなくいつもの共有フォルダ。この4点を見れば、10秒で「いつもの業務メール」と判断できました。見るべき所を決めておくことが、疑うことより効きます。"
+        }
+      ]
     },
     {
-      real: false,
-      sender: "Amazon",
-      avatar: "A",
-      subject: "ご注文の確認",
-      preview: "ご注文いただきありがとうございます。発送は…",
+      id: "invoice",
+      sender: "株式会社メディサプライ 営業部",
+      addr: "<sales-info@medisupply-delivery.net>",
+      avatar: "メ",
+      color: "#b06a3c",
+      to: "〇〇訪問看護ステーション 代表アドレス",
       time: "昨日",
-      body: "この度はご注文いただきありがとうございます。\n\nご注文商品は、通常2〜3日以内に発送いたします。発送が完了しましたら、改めてご連絡いたします。"
+      date: "昨日 17:31",
+      subject: "【再送】9月分 納品書・請求書のご送付（パスワード別送）",
+      preview: "いつもお世話になっております。先日お送りした9月分の納品書・請求書について、ファイル容量の都合により、下記URLよりダウンロードいただく形に…",
+      body:
+        "<p>いつもお世話になっております。メディサプライ営業部です。</p>" +
+        "<p>先日お送りした9月分の納品書・請求書について、ファイル容量の都合により、下記URLよりダウンロードいただく形に変更いたしました。お手数ですがご確認をお願いいたします。</p>" +
+        "<p><span class=\"file-chip\">🗜 請求書_202609_〇〇訪問看護ステーション.zip <span class=\"ext\">ZIP</span></span><br>" +
+        "<button class=\"mail-link\" data-action=\"none\">https://medisupply-delivery.net/dl/9f3a2c</button></p>" +
+        "<p>解凍パスワードは、別メールにてお送りしております。</p>" +
+        "<p class=\"sig\">株式会社メディサプライ 営業部<br>TEL 03-XXXX-XXXX</p>",
+      choices: [
+        {
+          label: "リンクからZIPをダウンロードして解凍し、中のファイルを開いて確認する",
+          result: "critical",
+          explain: "ファイルを開いた時点で、パソコンにバックドア（外部から遠隔操作するための裏口）が仕掛けられました。実はこの場面は、2026年に実際にあった事案がモデルです。外部との連絡用に使っている部門の共有アドレスに、取引先を装ったメールが届き、外部からのメールを受け取れるようになったばかりの社歴の浅いスタッフが、リンクを踏んでZIPをダウンロードし、中身を実行してしまいました。アプリをインストールしたわけではないので、Windows Defenderもセキュリティソフトも反応しませんでした。この事案では、たまたま近くにいた総務のスタッフがすぐに気づき、ログを確認した結果、裏口から見られたのは一部だけで実害はありませんでした。発見が数時間遅れていれば、結果は違っていた可能性があります。「パスワードは別送」のZIPは、メールの検査をすり抜けるための定番の手口です。"
+        },
+        {
+          label: "ダウンロードせず、取引先に電話で送付の有無を確認する。総務・システム担当にも一報する",
+          result: "safe",
+          explain: "これが正解です。見るべき点は、差出人のアドレスがいつもの取引先のドメインと違うこと、「再送」なのに元のメールの記憶がないこと、そして「パスワード別送のZIP」です。パスワード付きZIPは中身をメールの検査ができないため、ウイルスを届ける定番の手口になっています。実はこの場面は、2026年に実際にあった事案がモデルです。部門の共有アドレスに届いた同じ形のメールを、社歴の浅いスタッフが開いてZIPを実行し、パソコンにバックドアが仕掛けられました。セキュリティソフトは反応せず、たまたま近くにいた総務のスタッフが気づいたことで、実害の手前で止まりました。電話で確認する。開く前に誰かに一言かける。この事案が教えているのは、その一手間の価値です。"
+        }
+      ]
     }
   ];
+
+  var mailState = { answers: {}, current: null };
 
   function startPhishing() {
     quizState.key = null;
     currentReplay = startPhishing;
-    els.mailFromRaw.hidden = true;
-    els.mailRevealBtn.disabled = false;
-    els.mailRevealBtn.textContent = "差出人のアドレスを確認する";
+    mailState = { answers: {}, current: null };
     els.fakeId.value = "";
     els.fakePw.value = "";
     renderMailInbox();
     showScreen("mailInbox");
   }
 
+  function mailAnsweredCount() {
+    return INBOX.filter(function (m) { return mailState.answers[m.id]; }).length;
+  }
+
   function renderMailInbox() {
     els.mailList.innerHTML = "";
     INBOX.forEach(function (mail) {
+      var answered = mailState.answers[mail.id];
       var item = document.createElement("button");
       item.className = "mail-item";
       item.innerHTML =
-        '<span class="avatar">' + mail.avatar + '</span>' +
+        '<span class="dot' + (answered ? " read" : "") + '"></span>' +
+        '<span class="avatar" style="background:' + mail.color + '">' + mail.avatar + '</span>' +
         '<span class="body">' +
           '<span class="row1"><span class="sender">' + mail.sender + '</span><span class="time">' + mail.time + '</span></span>' +
           '<div class="subject">' + mail.subject + '</div>' +
           '<div class="preview">' + mail.preview + '</div>' +
+          (answered ? '<span class="done">対応済み</span>' : "") +
         '</span>';
-      if (mail.real) {
-        item.addEventListener("click", function () { showScreen("mailView"); });
-      } else {
-        item.addEventListener("click", function () { openNormalMail(mail); });
-      }
+      item.addEventListener("click", function () { openMail(mail); });
       els.mailList.appendChild(item);
+    });
+    var unread = INBOX.length - mailAnsweredCount();
+    els.mailCount.textContent = INBOX.length + "件のメッセージ、未対応" + unread + "件";
+    els.mailResultBtn.hidden = unread !== 0;
+  }
+
+  function openMail(mail) {
+    mailState.current = mail;
+    els.mvAvatar.textContent = mail.avatar;
+    els.mvAvatar.style.background = mail.color;
+    els.mvSender.textContent = mail.sender;
+    els.mvAddr.textContent = mail.addr;
+    els.mvTo.textContent = mail.to;
+    els.mvDate.textContent = mail.date;
+    els.mvSubject.textContent = mail.subject;
+    els.mvBody.innerHTML = mail.body;
+    els.mailViewPos.textContent = (INBOX.indexOf(mail) + 1) + " / " + INBOX.length;
+
+    // links inside the body behave like the corresponding choice
+    els.mvBody.querySelectorAll(".mail-link").forEach(function (lnk) {
+      lnk.addEventListener("click", function () {
+        var act = lnk.getAttribute("data-action");
+        if (act === "login") { showScreen("mailLogin"); }
+      });
+    });
+
+    els.mvChoices.innerHTML = "";
+    var letters = ["A", "B", "C"];
+    var already = mailState.answers[mail.id];
+    if (already) {
+      var note = document.createElement("p");
+      note.className = "mv-actions-label";
+      note.textContent = "このメールには対応済みです（" + already.letter + "）。受信トレイに戻って、残りのメールを確認してください。";
+      els.mvChoices.appendChild(note);
+      return;
+    }
+    mail.choices.forEach(function (choice, i) {
+      var btn = document.createElement("button");
+      btn.className = "choice-btn";
+      btn.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + choice.label + '</span>';
+      btn.addEventListener("click", function () {
+        if (choice.action === "login") { showScreen("mailLogin"); return; }
+        recordMailAnswer(mail, choice, letters[i]);
+      });
+      els.mvChoices.appendChild(btn);
     });
   }
 
-  function openNormalMail(mail) {
-    els.mailNormalSender.textContent = mail.sender;
-    els.mailNormalSubject.textContent = mail.subject;
-    els.mailNormalBody.textContent = mail.body || mail.preview;
-    showScreen("mailNormal");
+  function recordMailAnswer(mail, choice, letter) {
+    mailState.answers[mail.id] = { choice: choice, letter: letter };
+    renderMailInbox();
+    if (mailAnsweredCount() >= INBOX.length) {
+      finishPhishing();
+    } else {
+      showScreen("mailInbox");
+    }
+  }
+
+  function finishPhishing() {
+    var answers = INBOX.map(function (m) {
+      var a = mailState.answers[m.id];
+      return { question: { short: m.sender + "「" + m.subject + "」" }, choice: a.choice, letter: a.letter };
+    });
+    var failed = answers.some(function (a) { return a.choice.result === "critical"; });
+    var caution = answers.some(function (a) { return a.choice.result === "caution"; });
+    showOutcome(
+      failed,
+      caution
+        ? "鍵は渡していません。ただ、1通は判断がつかずに止まってしまいました。フィッシング対策は「全部を疑う」ことではなく、「どこを見るか」を決めておくことです。下に、3通それぞれの解説があります。"
+        : "3通すべてに、適切に対応できました。差出人のアドレス、宛先、内容の文脈、リンク先。この4点を見る習慣が、鍵を渡さない一番の方法です。下に、3通それぞれの解説があります。次のスライドで、こうした手口が実際に医療現場を狙っている実態を見てみましょう。",
+      "3通のうち、少なくとも1通で鍵を渡してしまいました。フィッシングは特別な人が引っかかるものではなく、忙しい日常の中で、誰にでも起きます。だからこそ、見る場所を決めておくことと、開く前に誰かに一言かけることが効きます。下に、3通それぞれの解説があります。",
+      answers
+    );
   }
 
   els.mailInboxBack.addEventListener("click", function () { showScreen("menu"); });
   els.mailViewBack.addEventListener("click", function () { showScreen("mailInbox"); });
-  els.mailNormalBack.addEventListener("click", function () { showScreen("mailInbox"); });
-
-  els.mailRevealBtn.addEventListener("click", function () {
-    els.mailFromRaw.hidden = false;
-    els.mailRevealBtn.disabled = true;
-    els.mailRevealBtn.textContent = "確認済み";
-  });
-
-  els.mailLinkBtn.addEventListener("click", function () { showScreen("mailLogin"); });
-
-  els.mailOfficialBtn.addEventListener("click", function () {
-    showOutcome(
-      false,
-      "よくできました。「厚生労働省」の名前や「至急」という言葉に惑わされず、リンクを踏まずに確認できました。次のスライドで、こうした手口が実際に医療現場を狙っている実態を見てみましょう。",
-      ""
-    );
-  });
+  els.mailResultBtn.addEventListener("click", function () { finishPhishing(); });
 
   els.fakeSubmitBtn.addEventListener("click", function () {
-    showOutcome(
-      true,
-      "",
-      "カルテのIDとパスワードを入力して送信してしまいました。このページは本物そっくりに作られた偽のログイン画面で、入力した情報はそのまま盗まれてしまいます。盗まれた1つのID・パスワードが、そのまま不正アクセスやランサムウェア被害の入口になることがあります。警察庁の集計では、2024年上半期のランサムウェア被害の約82.9%が、こうした日常の隙を突かれた侵入から始まっています。次のスライドで、こうした手口の実態を見てみましょう。"
-    );
+    var mail = mailState.current;
+    if (mail && mail.linkOutcomes) { recordMailAnswer(mail, mail.linkOutcomes.submit, "A"); }
   });
 
   els.fakeBackBtn.addEventListener("click", function () {
-    showOutcome(
-      false,
-      "リンクは開いてしまいましたが、この画面のおかしさに気づいて、情報を入力せずに閉じることができました。次のスライドで、こうした手口が実際に医療現場を狙っている実態を見てみましょう。",
-      ""
-    );
+    var mail = mailState.current;
+    if (mail && mail.linkOutcomes) { recordMailAnswer(mail, mail.linkOutcomes.back, "A"); }
   });
 
   renderMenu();
