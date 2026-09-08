@@ -364,7 +364,8 @@
 
   /* ===== omen (scareware) screen ===== */
   #screen-omen { padding: 0; position: relative; background: #05070a; overflow: hidden; }
-  .omen-stage { position: relative; flex: 1; min-height: 100vh; display: flex; align-items: flex-end; }
+  /* popups drop in from the top of the stage; the intro sits centred on its own */
+  .omen-stage { position: relative; flex: 1; min-height: 100vh; display: flex; align-items: stretch; }
   .omen-popup {
     position: absolute;
     width: 86%;
