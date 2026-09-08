@@ -712,6 +712,34 @@
     <p class="menu-note">選んだ内容が採点されて送信されることはありません。すべてこの画面の中だけで完結します。</p>
   </div>
 
+  <!-- PHISHING SUBMENU -->
+  <div class="screen" id="screen-phishing-menu">
+    <div class="progress-row">
+      <button class="back" id="ph-menu-back">← 選び直す</button>
+      <span class="step">CASE 02</span>
+    </div>
+    <h1 class="title">フィッシング・<br>偽の警告</h1>
+    <p class="lede">だます場所が違うだけで、やっていることは同じです。どちらから体験しますか。</p>
+    <div class="menu-list">
+      <button class="menu-item" id="ph-mail-btn">
+        <span class="num">✉</span>
+        <span>
+          <span class="label">メールで体験</span>
+          <div class="sub">受信トレイに届いた3通に、対応してみる</div>
+        </span>
+        <span class="arrow">→</span>
+      </button>
+      <button class="menu-item" id="ph-browser-btn">
+        <span class="num">⚠</span>
+        <span>
+          <span class="label">ブラウザで体験</span>
+          <div class="sub">画面に突然出てきた警告に、対応してみる</div>
+        </span>
+        <span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
   <!-- QUIZ -->
   <div class="screen" id="screen-quiz">
     <div class="progress-row">
@@ -745,7 +773,7 @@
   <div class="screen" id="screen-omen">
     <div class="omen-stage" id="omen-stage">
       <div class="omen-intro" id="omen-intro">
-        <span class="k">Case 05 — 予兆</span>
+        <span class="k">Case 02 — 偽の警告</span>
         <h2>自宅で、私物のパソコンを開いています。</h2>
         <p>訪問の記録を整理しようとした、そのときです。画面に見覚えのない表示が出てきます。何が起きるか、実際に体験してみてください。</p>
         <button class="omen-start-btn" id="omen-start-btn">パソコンの画面を見る →</button>
@@ -815,7 +843,7 @@
 (function () {
   var GAMES = {
     access: {
-      title: "不正アクセス編",
+      title: "不正アクセス",
       sub: "保守用の接続、使い回しのパスワード、多要素認証",
       questions: [
         {
@@ -872,12 +900,12 @@
     },
 
     phishing: {
-      title: "フィッシング編",
-      sub: "受信トレイから、怪しいメールを開いてみる"
+      title: "フィッシング・偽の警告",
+      sub: "メールと、ブラウザ。2つの入口から選べます"
     },
 
     malware: {
-      title: "マルウェア編",
+      title: "マルウェア感染",
       sub: "重いパソコン、更新の通知、私物のUSB",
       questions: [
         {
@@ -908,10 +936,9 @@
   };
 
   var MENU_ORDER = [
-    { key: "access", num: "I" },
-    { key: "phishing", num: "II" },
-    { key: "malware", num: "III" },
-    { key: "omen", num: "V" }
+    { key: "access", num: "Ⅰ", title: "不正アクセス", sub: "保守用の接続、使い回しのパスワード、多要素認証" },
+    { key: "phishing", num: "Ⅱ", title: "フィッシング・偽の警告", sub: "メールと、ブラウザ。2つの入口から選べます" },
+    { key: "malware", num: "Ⅲ", title: "マルウェア感染", sub: "重いパソコン、更新の通知、私物のUSB" }
   ];
 
   var els = {
@@ -923,7 +950,8 @@
       omen: document.getElementById("screen-omen"),
       mailInbox: document.getElementById("screen-mail-inbox"),
       mailView: document.getElementById("screen-mail-view"),
-      mailLogin: document.getElementById("screen-mail-login")
+      mailLogin: document.getElementById("screen-mail-login"),
+      phishingMenu: document.getElementById("screen-phishing-menu")
     },
     quizStep: document.getElementById("quiz-step"),
     quizProgress: document.getElementById("quiz-progress"),
@@ -976,24 +1004,15 @@
     MENU_ORDER.forEach(function (item) {
       var btn = document.createElement("button");
       btn.className = "menu-item";
-      var title, sub;
-      if (item.key === "omen") {
-        title = "予兆編";
-        sub = "自宅のパソコンに、突然の警告が出たら";
-      } else {
-        title = GAMES[item.key].title;
-        sub = GAMES[item.key].sub;
-      }
       btn.innerHTML =
         '<span class="num">' + item.num + '</span>' +
         '<span>' +
-          '<span class="label">' + title + '</span>' +
-          '<div class="sub">' + sub + '</div>' +
+          '<span class="label">' + item.title + '</span>' +
+          '<div class="sub">' + item.sub + '</div>' +
         '</span>' +
         '<span class="arrow">→</span>';
       btn.addEventListener("click", function () {
-        if (item.key === "omen") { startOmen(); }
-        else if (item.key === "phishing") { startPhishing(); }
+        if (item.key === "phishing") { showScreen("phishingMenu"); }
         else { startQuiz(item.key); }
       });
       els.menuList.appendChild(btn);
@@ -1201,17 +1220,36 @@
       if (omenResolved) { return; }
       omenResolved = true;
       clearInterval(omenTimerInterval);
+      var q = { short: "ブラウザに出た「ウイルス感染」の警告" };
       if (result === "called") {
         showOutcome(
           true,
           "",
-          "電話をかけてしまいました。電話の先にいたのは、サポート詐欺の犯人でした。指示されるまま画面の操作を許可してしまい、パソコンの中の情報が持ち出されてしまいました。実は、これとそっくりの画面が実際に表示された事例があります。次のスライドで見てみましょう。"
+          "電話をかけてしまいました。電話の先にいたのは、サポート詐欺の犯人です。下に解説があります。",
+          [{
+            question: q,
+            letter: "A",
+            choice: {
+              label: "表示された番号に電話をかけた",
+              result: "critical",
+              explain: "電話の先にいたのは、サポート詐欺の犯人でした。指示されるまま画面の操作を許可してしまい、パソコンの中を自由に見られる状態になります。<br><br>この画面の見分け方は、実はとても簡単です。<strong>本物のパソコンやセキュリティソフトが、電話番号を出すことは絶対にありません。</strong>画面に電話番号が出た時点で、100%詐欺です。<br><br>そして、閉じられなくても慌てないでください。あの「✕」が効かないのも、カウントダウンも、あなたを焦らせるための演出です。時間が過ぎても何も起きません。<br><br>正しい対応は、電源ボタンの長押しで強制終了するか、ブラウザだけを終了させることです。そのうえで、事業所の担当者に報告してください。"
+            }
+          }]
         );
       } else {
         showOutcome(
           false,
-          "画面に惑わされず、何もせず待つことができました。実は、「今すぐ電話しないとデータが消える」というあの表示自体が、あなたを慌てさせるための嘘でした。時間が経っても、何も起きません。実は、これとそっくりな画面が実際に表示された事例があります。次のスライドで見てみましょう。",
-          ""
+          "画面に惑わされず、何もしないでいられました。下に解説があります。",
+          "",
+          [{
+            question: q,
+            letter: "A",
+            choice: {
+              label: "電話をかけず、何もしないで待った",
+              result: "safe",
+              explain: "これが正解です。「今すぐ電話しないとデータが消える」という表示そのものが、あなたを慌てさせるための嘘でした。時間が過ぎても、何も起きません。<br><br>見分け方は、実はとても簡単です。<strong>本物のパソコンやセキュリティソフトが、電話番号を出すことは絶対にありません。</strong>画面に電話番号が出た時点で、100%詐欺です。<br><br>閉じられなくても大丈夫です。あの「✕」が効かないのも演出です。電源ボタンの長押しで強制終了するか、ブラウザだけを終了させてください。そのうえで、事業所の担当者に報告を。<br><br>ちなみにこの画面は、ウイルスに感染して出たものではありません。見ていたサイトの広告から表示されただけで、パソコンは無事です。"
+            }
+          }]
         );
       }
     }
@@ -1461,7 +1499,12 @@
     );
   }
 
-  els.mailInboxBack.addEventListener("click", function () { showScreen("menu"); });
+  // phishing submenu: same trick, two places it reaches you
+  document.getElementById("ph-menu-back").addEventListener("click", function () { showScreen("menu"); });
+  document.getElementById("ph-mail-btn").addEventListener("click", startPhishing);
+  document.getElementById("ph-browser-btn").addEventListener("click", startOmen);
+
+  els.mailInboxBack.addEventListener("click", function () { showScreen("phishingMenu"); });
   els.mailViewBack.addEventListener("click", function () { showScreen("mailInbox"); });
   els.mailResultBtn.addEventListener("click", function () { finishPhishing(); });
 
