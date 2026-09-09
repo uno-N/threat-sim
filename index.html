@@ -1464,7 +1464,8 @@
 
   function startPhishing() {
     quizState.key = null;
-    currentReplay = startPhishing;
+    // retry should land on the two entry points, not restart the inbox directly
+    currentReplay = function () { showScreen("phishingMenu"); };
     mailState = { answers: {}, current: null };
     els.fakeId.value = "";
     els.fakePw.value = "";
