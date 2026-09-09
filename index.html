@@ -660,7 +660,9 @@
     opacity: 0;
     transition: opacity 0.25s ease, transform 0.25s ease;
     z-index: 50;
+    pointer-events: none;
   }
+  .dl-toast[hidden] { display: none; }
   .dl-toast.show { opacity: 1; transform: translate(-50%, 0); }
   .dl-toast .dl-icon { flex-shrink: 0; }
   .dl-toast .dl-name { font-family: inherit; word-break: break-all; }
