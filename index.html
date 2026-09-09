@@ -631,7 +631,40 @@
     padding: 8px 12px;
     font-size: 14px;
     color: var(--m-text);
+    font-family: inherit;
+    text-align: left;
+    line-height: 1.5;
+    cursor: pointer;
   }
+  .mv-body .file-chip:active { background: #3a3a3c; }
+
+  /* download toast — the moment the file lands on the machine */
+  .dl-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translate(-50%, 16px);
+    width: calc(100% - 32px);
+    max-width: 420px;
+    background: #2c2c2e;
+    color: #f2f2f7;
+    border: 1px solid #3a3a3c;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 50;
+  }
+  .dl-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .dl-toast .dl-icon { flex-shrink: 0; }
+  .dl-toast .dl-name { font-family: inherit; word-break: break-all; }
+  @media (prefers-reduced-motion: reduce) { .dl-toast { transition: none; } }
   .mv-body .file-chip .ext { font-size: 11px; color: var(--m-sub); border: 1px solid var(--m-sub); border-radius: 3px; padding: 0 4px; }
   .mail-link {
     color: var(--m-blue);
@@ -832,11 +865,16 @@
           <input type="password" id="fake-pw" autocomplete="off">
         </label>
         <button class="primary-btn" id="fake-submit-btn">送信する</button>
-        <button class="ghost-btn" id="fake-back-btn">なんだか怪しいので、閉じて戻る</button>
+        <button class="ghost-btn" id="fake-back-btn">戻る</button>
       </div>
     </div>
   </div>
 
+  <!-- DOWNLOAD TOAST -->
+  <div class="dl-toast" id="dl-toast" hidden>
+    <span class="dl-icon">⬇</span>
+    <span><span class="dl-name" id="dl-name"></span> をダウンロードしました</span>
+  </div>
 
 </div>
 
@@ -1323,7 +1361,7 @@
           explain: "カルテのIDとパスワードが盗まれました。開いたページは本物そっくりに作られた偽のログイン画面で、入力した情報はそのまま攻撃者の手に渡ります。決め手は、<strong>メールのリンクから、ID・パスワードを入力させようとしている</strong>ことでした。「監査」という正当な理由と、「本日中」「ログイン停止」という期限で急がせるのは、フィッシングの基本形です。盗まれた1つのID・パスワードが、そのまま不正アクセスやランサムウェア被害の入口になります。警察庁の集計では、2024年上半期のランサムウェア被害の約82.9%が、こうした日常の隙を突かれた侵入から始まっています。"
         },
         back: {
-          label: "リンクは開いたが、画面のおかしさに気づいて、入力せずに閉じた",
+          label: "リンクは開いたが、入力せずに戻った",
           result: "safe",
           explain: "リンクは開いてしまいましたが、入力せずに閉じたので、鍵は渡していません。ただ、本来はリンクを押す前に止まれました。ID・パスワードは、メールのリンク先ではなく、いつも使っているアプリやブックマークから入る。これを決めておけば、「このページは本物だろうか」と迷う場面そのものがなくなります。"
         }
@@ -1380,17 +1418,18 @@
       time: "昨日",
       date: "昨日 17:31",
       subject: "【再送】9月分 納品書・請求書のご送付（パスワード別送）",
+      fileName: "請求書_202609_〇〇訪問看護ステーション.zip",
       preview: "いつもお世話になっております。先日お送りした9月分の納品書・請求書について、ファイル容量の都合により、下記URLよりダウンロードいただく形に…",
       body:
         "<p>いつもお世話になっております。メディサプライ営業部です。</p>" +
         "<p>先日お送りした9月分の納品書・請求書について、ファイル容量の都合により、下記URLよりダウンロードいただく形に変更いたしました。お手数ですがご確認をお願いいたします。</p>" +
-        "<p><span class=\"file-chip\">🗜 請求書_202609_〇〇訪問看護ステーション.zip <span class=\"ext\">ZIP</span></span><br>" +
-        "<button class=\"mail-link\" data-action=\"none\">https://medisupply-delivery.net/dl/9f3a2c</button></p>" +
+        "<p><button class=\"file-chip\" data-action=\"download\">🗜 請求書_202609_〇〇訪問看護ステーション.zip <span class=\"ext\">ZIP</span></button><br>" +
+        "<button class=\"mail-link\" data-action=\"download\">https://medisupply-delivery.net/dl/9f3a2c</button></p>" +
         "<p>解凍パスワードは、別メールにてお送りしております。</p>" +
         "<p class=\"sig\">株式会社メディサプライ 営業部<br>TEL 03-XXXX-XXXX</p>",
       choices: [
         {
-          label: "リンクからZIPをダウンロードして解凍し、中のファイルを開いて確認する",
+          label: "リンクを開き、ZIPをダウンロードした",
           result: "critical",
           explain: "ファイルを開いた時点で、パソコンに<strong>バックドア</strong>（外部から遠隔操作するための裏口）が仕掛けられました。<br><br>" +
             "実はこの場面は、2026年に実際にあった事案がモデルです。外部との連絡用に使っている部門の共有アドレスにメールが届き、社歴の浅いスタッフがリンクを踏んでZIPをダウンロードし、実行してしまいました。アプリをインストールしたわけではないので、<strong>Windows Defenderもセキュリティソフトも反応しませんでした</strong>。<br><br>" +
@@ -1470,11 +1509,12 @@
     els.mailViewPos.textContent = (INBOX.indexOf(mail) + 1) + " / " + INBOX.length;
     showScreen("mailView");
 
-    // links inside the body behave like the corresponding choice
-    els.mvBody.querySelectorAll(".mail-link").forEach(function (lnk) {
-      lnk.addEventListener("click", function () {
-        var act = lnk.getAttribute("data-action");
+    // links and attachments in the body count as choices — touching one is the answer
+    els.mvBody.querySelectorAll(".mail-link, .file-chip").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var act = el.getAttribute("data-action");
         if (act === "login") { showScreen("mailLogin"); }
+        else if (act === "download") { triggerDownload(mail); }
       });
     });
 
@@ -1498,6 +1538,22 @@
       });
       els.mvChoices.appendChild(btn);
     });
+  }
+
+  // Downloading is already the decision: show it happening, then record choice A.
+  function triggerDownload(mail) {
+    if (mailState.answers[mail.id]) { return; }
+    var toast = document.getElementById("dl-toast");
+    var name = document.getElementById("dl-name");
+    if (mail.fileName) { name.textContent = mail.fileName; }
+    toast.hidden = false;
+    void toast.offsetWidth;
+    toast.classList.add("show");
+    setTimeout(function () {
+      toast.classList.remove("show");
+      setTimeout(function () { toast.hidden = true; }, 300);
+      recordMailAnswer(mail, mail.choices[0], "A");
+    }, 1800);
   }
 
   function recordMailAnswer(mail, choice, letter) {
