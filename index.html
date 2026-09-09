@@ -1202,7 +1202,8 @@
 
   function startOmen() {
     quizState.key = null;
-    currentReplay = startOmen;
+    // retry should land on the two entry points, not replay the browser scenario
+    currentReplay = function () { showScreen("phishingMenu"); };
     els.omenStage.innerHTML = '';
     var intro = els.omenIntro;
     els.omenStage.appendChild(intro);
